@@ -12,15 +12,19 @@ var GitHubStrategy = require('passport-github2').Strategy;
 var GITHUB_CLIENT_ID = 'f3a53237e2956b8ab80d';
 var GITHUB_CLIENT_SECRET = '6654c093d88fa3db45b4c59059141044d6463d0d';
 
+//ユーザーの情報をデータとして保存する処理
 passport.serializeUser(function (user, done) {
   done(null, user);
 });
 
+//保存されたデータをユーザーの情報として読み出す際の処理
 passport.deserializeUser(function (obj, done) {
   done(null, obj);
 });
 
-
+//accessToken:認可済みのトークンを使い回せるように
+//refreshToken:有効期限が過ぎたらトークンを再発行される
+//profile:githubからのユーザーデータが保存される
 passport.use(new GitHubStrategy({
   clientID: GITHUB_CLIENT_ID,
   clientSecret: GITHUB_CLIENT_SECRET,
