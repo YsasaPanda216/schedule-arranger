@@ -8,6 +8,28 @@ var helmet = require('helmet');
 var session = require('express-session');
 var passport = require('passport');
 
+//モデルの読み込み
+var User = require('./models/user');
+var Schedule = require('./models/schedule');
+var Availability = require('./models/availability');
+var Candidate = require('./models/candidate');
+var Comment = require('./models/comment');
+
+//User.sync()（※TBL作成）が終わった後にthenが実行される
+User.sync().then(()=>{
+  //scheduleがuserに対してrelationを張る
+  Schedule.belongsTo(User,{foreignKey:'createdBy'});
+  //scheduleテーブル作成。順番に注意
+  Schedule.sync();
+  Comment.belongsTo(User, {foreignKey: 'userId'});
+  Comment.sync();
+  Availability.belongsTo(User, {foreignKey: 'userId'});
+  Candidate.sync().then(() => {
+    Availability.belongsTo(Candidate, {foreignKey: 'candidateId'});
+    Availability.sync();
+  });
+});
+
 var GitHubStrategy = require('passport-github2').Strategy;
 var GITHUB_CLIENT_ID = 'f3a53237e2956b8ab80d';
 var GITHUB_CLIENT_SECRET = '6654c093d88fa3db45b4c59059141044d6463d0d';
@@ -32,7 +54,12 @@ passport.use(new GitHubStrategy({
 },
   function (accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
-      return done(null, profile);
+      User.upsert({
+        userId:profile.id,
+        username:profile.username
+      }).then(()=>{
+        done(null, profile);
+      });
     });
   }
 ));
