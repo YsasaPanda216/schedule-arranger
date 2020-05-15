@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  form(action="/schedules", method="post")
+    div
+      h5 予定名(255文字まで)
+      input(type="text", name="scheduleName" maxlength="255")
+    div
+      h5 memo(500文字まで)
+      textarea(name="memo")
+    div
+      h5 候補日程 (改行して複数入力してください)
+      textarea(name="candidates")
+    button(type="submit") 予定作成
