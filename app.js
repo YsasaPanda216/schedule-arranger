@@ -91,7 +91,6 @@ app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/logout', logoutRouter);
-//先にschedulesRouter→availabilitiesRouter
 app.use('/schedules',schedulesRouter);
 app.use('/schedules', availabilitiesRouter);
 app.use('/schedules', commentsRouter);
