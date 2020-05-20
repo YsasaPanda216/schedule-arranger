@@ -8,15 +8,13 @@ const Candidate = require('../models/candidate');
 const User = require('../models/user');
 const Availability = require('../models/availability');
 const Comment = require('../models/comment');
-const csrf = require('csurf');
-const csrfProtection = csrf({ cookie: true });
 
 //認証されていればnew.pugをレンダリング
-router.get('/new',authenticationEnsurer,csrfProtection,(req,res,next)=>{
-  res.render('new', { user: req.user , csrfToken:req.csrfToken() });
+router.get('/new',authenticationEnsurer,(req,res,next)=>{
+  res.render('new', { user: req.user });
 });
 
-router.post('/',authenticationEnsurer,csrfProtection,(req,res,next)=>{
+router.post('/',authenticationEnsurer,(req,res,next)=>{
   const scheduleId = uuid.v4();
   const updatedAt = new Date();
   Schedule.create({
@@ -137,7 +135,7 @@ router.get('/:scheduleId', authenticationEnsurer, (req, res, next) => {
   });
 });
 
-router.get('/:scheduleId/edit', authenticationEnsurer, csrfProtection,(req, res, next) => {
+router.get('/:scheduleId/edit', authenticationEnsurer, (req, res, next) => {
   Schedule.findOne({
     where: {
       scheduleId: req.params.scheduleId
@@ -151,8 +149,7 @@ router.get('/:scheduleId/edit', authenticationEnsurer, csrfProtection,(req, res,
         res.render('edit', {
           user: req.user,
           schedule: schedule,
-          candidates: candidates,
-          csrfToken:req.csrfToken()
+          candidates: candidates
         });
       });
     } else {
@@ -163,7 +160,7 @@ router.get('/:scheduleId/edit', authenticationEnsurer, csrfProtection,(req, res,
   });
 });
 
-router.post('/:scheduleId', authenticationEnsurer,csrfProtection, (req, res, next) => {
+router.post('/:scheduleId', authenticationEnsurer, (req, res, next) => {
   Schedule.findOne({
     where: {
       scheduleId: req.params.scheduleId

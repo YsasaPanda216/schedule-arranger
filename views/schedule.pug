@@ -15,9 +15,9 @@ block content
   - var isMine = parseInt(user.id) === schedule.user.userId
   if isMine
     div
-      a(href=`/schedules/${schedule.scheduleId}/edit`).btn.btn-info この予定を編集する
-  h3.my-3 出欠表
-  table.table
+      a(href=`/schedules/${schedule.scheduleId}/edit`) この予定を編集する
+  h3 出欠表
+  table
     tr
       th 予定
       each user in users
@@ -28,14 +28,13 @@ block content
         each user in users
           - var availability = availabilityMapMap.get(user.userId).get(candidate.candidateId)
           - var availabilityLabels = ['欠', '？', '出'];
-          - var buttonStyles = ['btn-danger', 'btn-secondary', 'btn-success'];
           td
             if user.isSelf
-              button(class=`availability-toggle-button btn-lg ${buttonStyles[availability]}`
+              button(
                 data-schedule-id=schedule.scheduleId
                 data-user-id=user.userId
                 data-candidate-id=candidate.candidateId
-                data-availability=availability) #{availabilityLabels[availability]}
+                data-availability=availability).availability-toggle-button #{availabilityLabels[availability]}
             else
               p #{availabilityLabels[availability]}
     tr
@@ -46,7 +45,7 @@ block content
             p#self-comment #{commentMap.get(user.userId)}
             button(
               data-schedule-id = schedule.scheduleId
-              data-user-id=user.userId)#self-comment-button.btn-sm.btn-info 編集
+              data-user-id=user.userId)#self-comment-button 編集
         else
           td
             p #{commentMap.get(user.userId)}              
