@@ -30,6 +30,7 @@ User.sync().then(()=>{
   });
 });
 
+//Heroku対応
 var GitHubStrategy = require('passport-github2').Strategy;
 var GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID ||'f3a53237e2956b8ab80d';
 var GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET ||'6654c093d88fa3db45b4c59059141044d6463d0d';
